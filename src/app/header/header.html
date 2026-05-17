@@ -1,0 +1,26 @@
+<header class="header">
+  <div class="container header-inner">
+    <a routerLink="/home" class="logo">
+      <span class="logo-icon">🏨</span>
+      <span class="logo-text">Hotel<span class="logo-accent">Book</span></span>
+    </a>
+    <nav class="nav">
+      <a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}">Home</a>
+      <a routerLink="/hotel" routerLinkActive="active">Hotels</a>
+      <a routerLink="/bookedRoom" routerLinkActive="active">Booked Rooms</a>
+    </nav>
+    <div class="auth-btns">
+      <ng-container *ngIf="!isLoggedIn(); else loggedIn">
+        <a routerLink="/login" class="btn btn-outline">Login</a>
+        <a routerLink="/register" class="btn btn-primary">Register</a>
+      </ng-container>
+      <ng-template #loggedIn>
+        <a routerLink="/profile" class="profile-btn">
+          <img [src]="getAvatar()" class="profile-avatar" alt="profile">
+          <span class="profile-name">{{ getDisplayName() }}</span>
+        </a>
+        <button class="btn btn-danger" (click)="logout()">Logout</button>
+      </ng-template>
+    </div>
+  </div>
+</header>

@@ -1,0 +1,27 @@
+<div class="page-header">
+  <div class="container"><h1>Your Booking</h1><p>Booking confirmation details</p></div>
+</div>
+
+<div class="container page-content">
+  <div class="booking-card" *ngIf="bookid; else noBooking">
+    <div class="booking-icon">🎉</div>
+    <h2>Booking Confirmed!</h2>
+    <p class="booking-msg">{{ bookMsg }}</p>
+    <div class="booking-id-box">
+      <span class="id-label">Booking ID</span>
+      <span class="id-val">#{{ bookid }}</span>
+    </div>
+    <div class="booking-actions">
+      <a routerLink="/hotel" class="btn btn-primary">Book Another Room</a>
+      <a routerLink="/home" class="btn btn-outline">Back to Home</a>
+    </div>
+  </div>
+  <ng-template #noBooking>
+    <div class="no-booking">
+      <div style="font-size:64px;margin-bottom:20px">🏨</div>
+      <h2>No Booking Found</h2>
+      <p>You haven't made a booking yet.</p>
+      <a routerLink="/hotel" class="btn btn-primary" style="margin-top:24px">Browse Hotels</a>
+    </div>
+  </ng-template>
+</div>

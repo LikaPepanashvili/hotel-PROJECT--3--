@@ -1,0 +1,96 @@
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-overlay"></div>
+  <div class="hero-content container">
+    <div class="hero-eyebrow"><span>✦</span><span>LUXURY &amp; COMFORT</span></div>
+    <h1>Five Star <span class="accent">Hotels</span></h1>
+    <p>Experience the best hospitality with our handpicked five star hotels.</p>
+    <a routerLink="/hotel" class="btn btn-primary hero-cta">Explore Hotels →</a>
+  </div>
+
+  <div class="search-bar container">
+    <div class="search-inner">
+      <div class="sf sf-text">
+        <span>🔍</span>
+        <input type="text" [(ngModel)]="searchQ" placeholder="Search hotels or rooms..." (keyup.enter)="goSearch()" />
+      </div>
+      <div class="sdiv"></div>
+      <div class="sf">
+        <span class="slbl">📍 City</span>
+        <select [(ngModel)]="selectedCity">
+          <option value="">All Cities</option>
+          <option *ngFor="let c of cities" [value]="c">{{ c }}</option>
+        </select>
+      </div>
+      <div class="sdiv"></div>
+      <div class="sf">
+        <span class="slbl">💰 Price Range</span>
+        <select [(ngModel)]="selectedPrice">
+          <option value="">Any Price</option>
+          <option value="100">Up to 100€</option>
+          <option value="200">Up to 200€</option>
+          <option value="500">Up to 500€</option>
+        </select>
+      </div>
+      <div class="sdiv"></div>
+      <div class="sf">
+        <span class="slbl">👥 Guests</span>
+        <select [(ngModel)]="selectedGuests">
+          <option value="1">1 Guest</option>
+          <option value="2">2 Guests</option>
+          <option value="3">3 Guests</option>
+          <option value="4">4+ Guests</option>
+        </select>
+      </div>
+      <button class="btn btn-primary search-btn" (click)="goSearch()">🔍 Search</button>
+    </div>
+  </div>
+</section>
+
+<!-- Hotels Section -->
+<section class="section">
+  <div class="container">
+    <div class="sec-header">
+      <div class="sec-label">
+        <span class="star-icon">✦</span>
+        <h2>Featured Hotels</h2>
+      </div>
+    </div>
+
+    <div class="spinner-wrap" *ngIf="loading">
+      <div class="spinner"></div><p>Loading hotels...</p>
+    </div>
+
+    <div class="hotels-grid" *ngIf="!loading">
+      <a class="hotel-card" *ngFor="let h of displayedHotels" [routerLink]="['/room']" [queryParams]="{id: h.id}">
+        <div class="hcard-img">
+          <img [src]="h.featuredImage" [alt]="h.name" (error)="onImgErr($event)">
+          <div class="hcard-overlay"><span>View Rooms →</span></div>
+        </div>
+        <div class="hcard-body">
+          <h3>{{ h.name }}</h3>
+          <p class="hcard-city">📍 {{ h.city }}</p>
+          <p class="hcard-addr">{{ h.address }}</p>
+        </div>
+      </a>
+    </div>
+
+    <div class="view-all-wrap" *ngIf="!loading">
+      <a routerLink="/hotel" class="btn btn-outline view-all-btn">View all hotels →</a>
+    </div>
+  </div>
+</section>
+
+<!-- USP -->
+<section class="usp-section">
+  <div class="container">
+    <h2 class="usp-title">Why Choose Us</h2>
+    <div class="usp-grid">
+      <div class="usp-card" *ngFor="let u of usps">
+        <div class="usp-icon">{{ u.icon }}</div>
+        <h3>{{ u.title }}</h3>
+        <p>{{ u.desc }}</p>
+      </div>
+    </div>
+  </div>
+</section>

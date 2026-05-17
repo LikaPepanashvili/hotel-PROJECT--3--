@@ -1,0 +1,104 @@
+<!-- Hotel Header -->
+<div class="hotel-header" *ngIf="hotel.name">
+  <div class="hotel-header-bg" [style.backgroundImage]="'url(' + hotel.featuredImage + ')'"></div>
+  <div class="hotel-header-overlay"></div>
+  <div class="container hotel-header-content">
+    <a routerLink="/hotel" class="back-link">← Back to Hotels</a>
+    <h1>{{ hotel.name }}</h1>
+    <p class="hotel-loc">📍 {{ hotel.city }} — {{ hotel.address }}</p>
+  </div>
+</div>
+
+<div class="container main-content">
+  <!-- Room Type Tabs -->
+  <div class="type-tabs" *ngIf="roomTypes.length > 0">
+    <button class="type-tab" [class.active]="selectedType===''" (click)="setType('')">All</button>
+    <button class="type-tab" *ngFor="let t of roomTypes" [class.active]="selectedType===t" (click)="setType(t)">{{ t }}</button>
+  </div>
+
+  <!-- Filters Panel -->
+  <div class="filters-panel" *ngIf="hotel.name">
+    <div class="filter-item price-filter">
+      <label>Price Per Night</label>
+      <input type="range" min="0" max="1000" step="10" [(ngModel)]="maxPrice" (input)="applyFilters()" class="range-slider">
+      <div class="price-vals">
+        <span>0€</span>
+        <span class="price-active">{{ maxPrice }}€</span>
+      </div>
+    </div>
+    <div class="filter-item">
+      <label>Room Type</label>
+      <select [(ngModel)]="selectedType" (change)="applyFilters()">
+        <option value="">Select a room</option>
+        <option *ngFor="let t of roomTypes" [value]="t">{{ t }}</option>
+      </select>
+    </div>
+    <div class="filter-item">
+      <label>Check-in</label>
+      <input type="date" [(ngModel)]="checkIn" [min]="today">
+    </div>
+    <div class="filter-item">
+      <label>Check-out</label>
+      <input type="date" [(ngModel)]="checkOut" [min]="checkIn || today">
+    </div>
+    <div class="filter-item">
+      <label>Guests</label>
+      <div class="guests-ctrl">
+        <button (click)="changeGuests(-1)">−</button>
+        <span>{{ guests }}</span>
+        <button (click)="changeGuests(1)">+</button>
+      </div>
+    </div>
+    <div class="filter-actions">
+      <button class="btn btn-primary" (click)="applyFilters()">Apply Filter</button>
+      <button class="btn btn-outline" (click)="resetFilters()">Reset</button>
+    </div>
+  </div>
+
+  <!-- Results count -->
+  <div class="results-row" *ngIf="!loading && hotel.name">
+    <span class="results-count">{{ filteredRooms.length }} room{{ filteredRooms.length !== 1 ? 's' : '' }} available</span>
+    <span class="date-range" *ngIf="checkIn && checkOut">
+      {{ checkIn }} → {{ checkOut }} · {{ getNights() }} night{{ getNights() !== 1 ? 's' : '' }}
+    </span>
+  </div>
+
+  <div class="spinner-wrap" *ngIf="loading">
+    <div class="spinner"></div><p>Loading rooms...</p>
+  </div>
+
+  <!-- Rooms Grid -->
+  <div class="rooms-grid" *ngIf="!loading && filteredRooms.length > 0">
+    <div class="room-card" *ngFor="let room of filteredRooms">
+      <div class="room-img-wrap">
+        <img [src]="room.images[0]?.source" [alt]="room.name" (error)="onImgErr($event)">
+        <div class="price-tag">
+          <span class="price-amt">€ {{ room.pricePerNight }}</span>
+          <span class="price-lbl">a night</span>
+        </div>
+      </div>
+      <div class="room-body">
+        <div class="room-top">
+          <div>
+            <h3>{{ room.name }}</h3>
+            <div class="room-meta">
+              <span>👥 {{ room.maximumGuests }} guests</span>
+              <span>📶 Free Wi-Fi</span>
+              <span *ngIf="room.available" class="avail">✓ Available</span>
+              <span *ngIf="!room.available" class="unavail">✗ Unavailable</span>
+            </div>
+          </div>
+          <a [routerLink]="['/booking']" [queryParams]="{id: room.id}" class="btn btn-primary book-btn" (click)="$event.stopPropagation()">
+            Book Now
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="no-results" *ngIf="!loading && filteredRooms.length === 0 && hotel.name">
+    <div style="font-size:48px;margin-bottom:16px">🏨</div>
+    <h3>No rooms match your filters</h3>
+    <button class="btn btn-primary" style="margin-top:18px" (click)="resetFilters()">Show all rooms</button>
+  </div>
+</div>

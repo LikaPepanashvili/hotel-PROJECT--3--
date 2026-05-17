@@ -1,0 +1,25 @@
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-logo">🏨</div>
+    <h2>Welcome Back</h2>
+    <p class="subtitle">Sign in to your account</p>
+    <form #loginForm="ngForm" (ngSubmit)="login(loginForm)">
+      <div class="form-group">
+        <label>Phone Number</label>
+        <input type="text" name="phoneNumber" ngModel required placeholder="+995 555 000 000">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <div class="pass-wrap">
+          <input [type]="showPass ? 'text' : 'password'" name="password" ngModel required placeholder="Your password">
+          <button type="button" class="eye-btn" (click)="showPass=!showPass">{{ showPass ? '🙈' : '👁️' }}</button>
+        </div>
+      </div>
+      <p class="error-msg" *ngIf="errorMsg">{{ errorMsg }}</p>
+      <button type="submit" class="btn btn-primary submit-btn" [disabled]="loading">
+        {{ loading ? 'Signing in...' : 'Sign In' }}
+      </button>
+    </form>
+    <p class="switch">Don't have an account? <a routerLink="/register">Register</a></p>
+  </div>
+</div>

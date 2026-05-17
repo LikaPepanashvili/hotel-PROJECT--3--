@@ -1,0 +1,74 @@
+<div class="page-header">
+  <div class="container"><h1>Book a Room</h1><p>Complete your reservation</p></div>
+</div>
+
+<div class="container page-content">
+  <div class="booking-layout">
+    <!-- Room Preview -->
+    <div class="room-preview" *ngIf="room.name">
+      <div class="img-gallery">
+        <img class="main-img" [src]="room.images[activeImg]?.source" [alt]="room.name" (error)="onImgErr($event)">
+        <div class="thumbs" *ngIf="room.images.length > 1">
+          <img *ngFor="let img of room.images; let i = index"
+               [src]="img.source" [class.active-thumb]="activeImg === i"
+               (click)="activeImg = i" (error)="onImgErr($event)">
+        </div>
+      </div>
+      <div class="room-info">
+        <h2>{{ room.name }}</h2>
+        <div class="room-stats">
+          <div class="stat">
+            <span class="stat-val">€{{ room.pricePerNight }}</span>
+            <span class="stat-lbl">per night</span>
+          </div>
+          <div class="stat">
+            <span class="stat-val">{{ room.maximumGuests }}</span>
+            <span class="stat-lbl">max guests</span>
+          </div>
+          <div class="stat">
+            <span class="stat-val" [class.avail]="room.available" [class.unavail]="!room.available">
+              {{ room.available ? '✓' : '✗' }}
+            </span>
+            <span class="stat-lbl">{{ room.available ? 'Available' : 'Unavailable' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Booking Form -->
+    <div class="booking-form-wrap">
+      <h2>Your Details</h2>
+      <form #bookForm="ngForm" (ngSubmit)="book(bookForm)">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" name="customerName" ngModel required placeholder="John Doe">
+        </div>
+        <div class="form-group">
+          <label>ID / Passport</label>
+          <input type="text" name="customerId" ngModel required placeholder="ID number">
+        </div>
+        <div class="form-group">
+          <label>Phone</label>
+          <input type="tel" name="customerPhone" ngModel required placeholder="+995 555 000 000">
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Check-in</label>
+            <input type="date" name="checkInDate" ngModel required [min]="today">
+          </div>
+          <div class="form-group">
+            <label>Check-out</label>
+            <input type="date" name="checkOutDate" ngModel required [min]="today">
+          </div>
+        </div>
+
+        <p class="error-msg" *ngIf="errorMsg">{{ errorMsg }}</p>
+        <p class="success-msg" *ngIf="successMsg">{{ successMsg }}</p>
+
+        <button type="submit" class="btn btn-primary book-btn" [disabled]="submitting">
+          {{ submitting ? 'Booking...' : 'Confirm Booking' }}
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
